@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NKY-STORE - Cart</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="container nav-container">
+      <img src="/frontend/image/logo.svg" alt="NKY Logo" class="logo" />
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="cart.html" class="active">Cart</a></li>
+        </ul>
+        <form id="search-form" action="#" method="GET" onsubmit="return false;" class="search-form">
+          <input type="text" id="search-input" placeholder="Search products..." />
+          <button type="submit" id="search-button">Search</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <section class="container">
+    <h2>Your Shopping Cart</h2>
+  <table id="cart-table" class="cart-table">
+      <thead>
+        <tr class="cart-header-row">
+          <th class="cart-header product-header">Product</th>
+          <th class="cart-header price-header">Price</th>
+          <th class="cart-header quantity-header">Quantity</th>
+          <th class="cart-header total-header">Total</th>
+          <th class="cart-header remove-header">Remove</th>
+        </tr>
+      </thead>
+      <tbody id="cart-items">
+        <!-- Cart items will be dynamically inserted here -->
+      </tbody>
+    </table>
+    <p id="cart-total" class="cart-total">Total: Rs 0.00</p>
+    <button id="checkout-btn" class="checkout-btn">Checkout</button>
+  </section>
+
+  <script>
+    // Cart data stored in localStorage under 'cart'
+    function getCart() {
+      const cart = localStorage.getItem('cart');
+      return cart ? JSON.parse(cart) : [];
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function renderCart() {
+      const cartItemsContainer = document.getElementById('cart-items');
+      const cartTotalElem = document.getElementById('cart-total');
+      cartItemsContainer.innerHTML = '';
+      const cart = getCart();
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px;">Your cart is empty.</td></tr>';
+        cartTotalElem.textContent = 'Total: Rs 0.00';
+        return;
+      }
+
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+
+        const tr = document.createElement('tr');
+
+        const tdName = document.createElement('td');
+        tdName.textContent = item.name;
+        tdName.classList.add('cart-cell', 'product-cell');
+
+        const tdPrice = document.createElement('td');
+        tdPrice.textContent = 'Rs ' + item.price.toFixed(2);
+        tdPrice.classList.add('cart-cell', 'price-cell');
+
+        const tdQuantity = document.createElement('td');
+        tdQuantity.classList.add('cart-cell', 'quantity-cell');
+        const quantityInput = document.createElement('input');
+        quantityInput.type = 'number';
+        quantityInput.min = '1';
+        quantityInput.value = item.quantity;
+        quantityInput.classList.add('quantity-input');
+        quantityInput.addEventListener('change', (e) => {
+          const newQty = parseInt(e.target.value);
+          if (newQty > 0) {
+            cart[index].quantity = newQty;
+            saveCart(cart);
+            renderCart();
+          }
+        });
+        tdQuantity.appendChild(quantityInput);
+
+        const tdTotal = document.createElement('td');
+        tdTotal.textContent = 'Rs ' + itemTotal.toFixed(2);
+        tdTotal.classList.add('cart-cell', 'total-cell');
+
+        const tdRemove = document.createElement('td');
+        tdRemove.classList.add('cart-cell', 'remove-cell');
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'Remove';
+        removeBtn.classList.add('remove-btn');
+        removeBtn.addEventListener('click', () => {
+          cart.splice(index, 1);
+          saveCart(cart);
+          renderCart();
+        });
+        tdRemove.appendChild(removeBtn);
+
+        tr.appendChild(tdName);
+        tr.appendChild(tdPrice);
+        tr.appendChild(tdQuantity);
+        tr.appendChild(tdTotal);
+        tr.appendChild(tdRemove);
+
+        cartItemsContainer.appendChild(tr);
+      });
+
+      cartTotalElem.textContent = 'Total: Rs ' + total.toFixed(2);
+    }
+
+    document.getElementById('checkout-btn').addEventListener('click', () => {
+      alert('Checkout functionality is not implemented yet.');
+    });
+
+    // Initial render
+    renderCart();
+  </script>
+</body>
+</html>

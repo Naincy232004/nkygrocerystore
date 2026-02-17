@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NKY - Online Grocery Store</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="container nav-container">
+      <img src="/frontend/image/logo.svg" alt="NKY Logo" class="logo" />
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="cart.html">Cart</a></li>
+        </ul>
+        <form id="search-form" action="#" method="GET" onsubmit="return false;" class="search-form">
+          <input type="text" id="search-input" placeholder="Search products..." />
+          <button type="submit" id="search-button">Search</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <section id="hero">
+    <div class="container hero-content">
+      <h1>Welcome to NKY Grocery</h1>
+      <p>Your one-stop shop for fresh groceries delivered to your door.</p>
+      <a href="#products" class="btn-cta">Shop Now</a>
+    </div>
+  </section>
+
+  <section id="products" class="container">
+    <h2>Our Products</h2>
+    <div class="product-grid" id="product-list">
+      <!-- Products will be dynamically inserted here -->
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-content">
+      <p>&copy; 2025 NKY Grocery. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
